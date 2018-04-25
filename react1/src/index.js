@@ -1,27 +1,10 @@
-import React,{Component} from "react";
+import React from "react";
 import ReactDOM from "react-dom";
-import "./index.css";
-
-class Likebutton extends Component{
-    constructor(){
-        super()
-        this.state={isLiked:false}
-    }
-    handleClickOnLikeButton(){
-        this.setState({
-            isLiked:!this.state.isLiked
-        })
-    }
-    render(){
-        return (
-            <button onClick={this.handleClickOnLikeButton.bind(this)}>
-                {this.state.isLiked?"cancel":"execute"}👍
-            </button>
-        )
-    }
-}
+import './index.css';
+import ComponentApp from "./Comment/CommentApp";
+import './Comment/Comment.css'
 
 ReactDOM.render(
-    <Likebutton/>,
+    <ComponentApp/>,
     document.getElementById('root')
 );
