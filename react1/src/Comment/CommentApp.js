@@ -1,35 +1,42 @@
 import React, {Component} from 'react';
+import PropTypes from 'prop-types';
 import CommentInput from './CommentInput';
 import CommentList from './CommentList';
+import wrapWithLoadData from './wrapWithLoadData'
 
 //CommentApp 现在暂时还很简单，文件顶部引入了 CommentInput 和 CommentList 。
 class ComponentApp extends Component {
-    constructor() {
-        super();
+    static propTypes = {
+        data: PropTypes.any,
+        saveData: PropTypes.func.isRequired
+    };
+
+    constructor(props) {
+        super(props);
         this.state = {
-            comments: []
+            comments: props.data
         }
     }
 
-    //每次将要渲染之前修改数据
-    componentWillMount() {
-        this._loadComments();
-    }
+    /* //每次将要渲染之前修改数据
+     componentWillMount() {
+         this._loadComments();
+     }
 
-    //保存列表区的内容
-    _saveComments(comments) {
-        localStorage.setItem('comments', JSON.stringify(comments));
+     //保存列表区的内容
+     _saveComments(comments) {
+         localStorage.setItem('comments', JSON.stringify(comments));
 
-    }
+     }
 
-    //加载本地的列表区内容
-    _loadComments() {
-        let comments = localStorage.getItem('comments');
-        if (comments) {
-            comments = JSON.parse(comments);
-            this.setState({comments})
-        }
-    }
+     //加载本地的列表区内容
+     _loadComments() {
+         let comments = localStorage.getItem('comments');
+         if (comments) {
+             comments = JSON.parse(comments);
+             this.setState({comments})
+         }
+     }*/
 
     handleSubmitComment(comment) {
         if (!comment) return;
@@ -38,7 +45,7 @@ class ComponentApp extends Component {
         const comments = this.state.comments;
         comments.push(comment);
         this.setState({comments});
-        this._saveComments(comments);
+        this.props.saveData(comments);
         // this.state.comments.push(comment);
         // this.setState({
         //     comments: this.state.comments
@@ -50,7 +57,7 @@ class ComponentApp extends Component {
         const comments = this.state.comments;
         comments.splice(index, 1);
         this.setState({comments});
-        this._saveComments(comments);
+        this.props.saveData(comments);
     }
 
     render() {
@@ -64,4 +71,5 @@ class ComponentApp extends Component {
     }
 }
 
+ComponentApp = wrapWithLoadData(ComponentApp, 'comments');
 export default ComponentApp;
